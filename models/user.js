@@ -34,31 +34,15 @@ const UserSchema = new Schema(
       required: true,
       trim: true,
     },
-    Image: {
+   adress: {
       type: String,
-      trim: true,
-    },
-    isSubscribed: Boolean,
-    token: {
-      type: String,
-    },
-    isDeleted: {
-      type: Boolean,
-      default: false,
+      required: true,
     },
   },
   {
     collection: "users",
   }
 );
-UserSchema.plugin(uniqueValidator, {message: 'is already taken.'});
-UserSchema.plugin(mongoosePaginate);
-UserSchema.pre('findOneAndUpdate', function() {
-  this.$where = { isDeleted: false };
-});
-UserSchema.post('findOneAndDelete', async function(next) {
-  const subscription = await Subscription.findOneAndDelete(this.Subscription).exec();
-  next();
-});
+
 const User = model("User", UserSchema);
 export default User;

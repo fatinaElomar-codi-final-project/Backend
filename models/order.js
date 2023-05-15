@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-import uniqueValidator from 'mongoose-unique-validator';
-import mongoosePaginate from 'mongoose-paginate-v2';
-import Subscription from "./subscription_model.js";
+
 const { Schema, model } = mongoose;
 
 const OrderShema = new Schema(
@@ -16,27 +14,22 @@ const OrderShema = new Schema(
         required: true,
         trim: true,
       },
-      User_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "UserSchema",
+      dishes: {
+        type: [String], 
+        required: true,
+        trim: true,
       },
-      dish_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "DishSchema",
+      total_amount: {
+        type: String,
+        required: true,
+        trim: true,
       },
+    
   },
   {
     collection: "Orders",
   }
 );
-OrderShema.plugin(uniqueValidator, {message: 'is already taken.'});
-OrderShema.plugin(mongoosePaginate);
-OrderShema.pre('findOneAndUpdate', function() {
-  this.$where = { isDeleted: false };
-});
-OrderShema.post('findOneAndDelete', async function(next) {
-  const subscription = await Subscription.findOneAndDelete(this.Subscription).exec();
-  next();
-});
+
 const Order = model("Order", OrderShema);
 export default Order;
