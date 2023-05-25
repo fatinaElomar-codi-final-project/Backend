@@ -2,13 +2,12 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-const ReserveShema = new Schema(
+const ReserveSchema = new Schema(
   {
     table_nb: {
       type: Number,
       required: true,
     },
-
     date: {
       type: String,
       required: true,
@@ -19,10 +18,9 @@ const ReserveShema = new Schema(
       required: true,
       trim: true,
     },
-   
     client_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "UserSchema",
+      ref: "User",
     },
   },
   {
@@ -30,5 +28,11 @@ const ReserveShema = new Schema(
   }
 );
 
-const Reserve = model("Reserve", ReserveShema);
+// Add the `populate()` method to populate the `client_id` field
+ReserveSchema.pre("findOne", function (next) {
+  this.populate("client_id");
+  next();
+});
+
+const Reserve = model("Reserve", ReserveSchema);
 export default Reserve;

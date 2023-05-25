@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-// import uniqueValidator from "mongoose-unique-validator";
-// import mongoosePaginate from "mongoose-paginate-v2";
+
 const { Schema, model } = mongoose;
 
 const ProductSchema = new Schema(
@@ -24,7 +23,6 @@ const ProductSchema = new Schema(
       type: String,
       required: true,
     },
-    
     price: {
       type: String,
       required: true,
@@ -34,21 +32,173 @@ const ProductSchema = new Schema(
       type: String,
       trim: true,
     },
-    // offer: {
-    //   type: String,
-    //   trim: true,
-    // },
     category_id: {
-      type: String,
-      trim: true,
-      ref: "CategorySchema",
-
+      type: Schema.Types.ObjectId,
+      ref: "Category",
     },
   },
   {
     collection: "Dishes",
+    timestamps: true,
   }
 );
 
-const Products = model("Dishs", ProductSchema);
-export default Products;
+// Add the `populate()` method to populate the `category_id` field with the category name
+ProductSchema.pre("findOne", function (next) {
+  this.populate({
+    path: "category_id",
+    select: "name",
+  });
+  next();
+});
+
+const Product = model("Product", ProductSchema);
+export default Product;
+
+// Retrieve all categories based on category_id
+export const getCategoriesByProductId = async (productId) => {
+  try {
+    const product = await Product.findById(productId).populate({
+      path: "category_id",
+      select: "name",
+    });
+    if (!product) {
+      throw new Error("Product not found");
+    }
+    const category = product.category_id;
+    if (!category) {
+      throw new Error("Category not found");
+    }
+    return category.name;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+};

@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
-const ReviewSchema = mongoose.Schema(
+const { Schema, model } = mongoose;
+
+const ReviewSchema = new Schema(
   {
     name: {
       type: String,
@@ -10,19 +12,26 @@ const ReviewSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    Feedback: {
+    feedback: {
       type: String,
       required: true,
     },
     product_id: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "ProductSchema",
+      ref: "Product",
     },
   },
   {
     timestamps: true,
   }
 );
+
+// Add the `populate()` method to populate the `product_id` field
+ReviewSchema.pre("findOne", function (next) {
+  this.populate("product_id");
+  next();
+});
+
 const Review = model("Review", ReviewSchema);
 export default Review;

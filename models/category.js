@@ -18,7 +18,7 @@ const CategorySchema = mongoose.Schema(
         "Coffee and Tea",
         "Smoothies and Shakes",
         "Wraps and Sandwiches",
-        "Ice Cream ",
+        "Ice Cream",
         "kids meals",
       ],
     },
@@ -32,6 +32,7 @@ const CategorySchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
 
 const Category = mongoose.model("Category", CategorySchema);
 export default Category;

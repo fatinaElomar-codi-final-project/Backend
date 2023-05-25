@@ -1,6 +1,5 @@
-// import express from "express";
 import fs from "fs";
-import Product from ".././models/product.js"
+import Product from "../models/product.js";
 
 function getAll(req, res, next) {
   const page = parseInt(req.query.page) || 1;
@@ -44,17 +43,14 @@ export const addProduct = async (req, res, next) => {
       description: req.body.description,
       price: req.body.price,
       count: req.body.count,
-      categories: req.body.categories,
+      category_id: req.body.category_id,
       dishImage: req.body.image,
     });
-    form.dishImage = await form.save().then((response) => {
-      if (response) {
-        res.status(200).send({
-          status: 200,
-          message: "Added Dish successfuly",
-          response,
-        });
-      }
+    await form.save();
+    res.status(200).send({
+      status: 200,
+      message: "Added Dish successfully",
+      response: form,
     });
   } catch (err) {
     return next(err);
@@ -68,7 +64,7 @@ export const updateProduct = async (req, res, next) => {
     count,
     description,
     dishImage,
-    categories,
+    category_id,
     type,
   } = req.body;
   try {
@@ -76,15 +72,15 @@ export const updateProduct = async (req, res, next) => {
     if (!Dish) {
       return res.status(404).json({ message: "Dish not found" });
     }
-    if (Dish.image) {
-      fs.unlinkSync(`${Dish.image}`);
+    if (Dish.dishImage && Dish.dishImage !== dishImage) {
+      fs.unlinkSync(`${Dish.dishImage}`);
     }
     Dish.name = name;
     Dish.description = description;
     Dish.type = type;
     Dish.price = price;
     Dish.count = count;
-    Dish.categories = categories;
+    Dish.category_id = category_id;
     Dish.dishImage = dishImage;
     await Dish.save();
     res.json(Dish);
@@ -95,15 +91,13 @@ export const updateProduct = async (req, res, next) => {
 };
 
 // delete category
+// controller
 export const deleteProduct = async (req, res) => {
   let { id } = req.params;
   try {
-    const Dish = await Dishs.findByIdAndDelete({ _id: id });
+    const Dish = await Product.findByIdAndDelete({ _id: id });
     if (Dish !== null && Dish !== undefined) {
-      fs.unlinkSync(`${Dish.image}`, (err) => {
-        if (err) throw err;
-        console.log(`Successfully deleted file ${Dish.image}`);
-      });
+      deleteImage(Dish.dishImage);
     }
 
     res.status(200).json("Dish deleted successfully");
