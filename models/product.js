@@ -44,7 +44,7 @@ const ProductSchema = new Schema(
 );
 
 // Add the `populate()` method to populate the `category_id` field with the category name
-ProductSchema.pre("findOne", function (next) {
+ProductSchema.pre(["findOne", "find"], function (next) {
   this.populate({
     path: "category_id",
     select: "name",
