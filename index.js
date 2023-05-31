@@ -23,11 +23,7 @@ app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
-const corsOptions = {
-  origin: "https://wizerdserver-app.onrender.com",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-};
+const corsOptions = {};
 app.use(cors(corsOptions));
 app.use("/dish",Product_routes);
 app.use("/category",CategoryRoutes);
