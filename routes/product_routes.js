@@ -1,5 +1,5 @@
 import express from "express";
-import uploadImage from "../middleware/upload.js";
+import uploadImage, { deleteImage } from "../middleware/upload.js";
 import Product_controller from  ".././controllers/product_controller.js"
 // import verifyToken, { verifyAdmin } from "../middleware/auth.js";
 const router = express.Router();
