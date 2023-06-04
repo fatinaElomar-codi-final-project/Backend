@@ -10,6 +10,8 @@ import connectDB from "./config/db.js";
 // import ContactUsMailerRoutes from "./routes/contactUsMailer_route.js";
 import Product_routes from "./routes/product_routes.js"
 import CategoryRoutes from "./routes/category_routes.js"
+import OrderRoutes from "./routes/order_routes.js"
+
 import cors from "cors"
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -27,6 +29,7 @@ const corsOptions = {};
 app.use(cors(corsOptions));
 app.use("/dish",Product_routes);
 app.use("/category",CategoryRoutes);
+app.use("/order",OrderRoutes);
 
 
 app.get("/", (req, res) => {

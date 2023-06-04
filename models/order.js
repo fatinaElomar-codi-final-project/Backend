@@ -4,25 +4,49 @@ const { Schema, model } = mongoose;
 
 const OrderShema = new Schema(
   {
-    type: {
+    name: {
+      type: String,
+      required: true,
+    },
+    ordertype: {
+      type: String,
+      enum: ["delivery", "local order", "takeaway"],
+      default: "N/A",
+
+      required: true,
+    },
+    
+    address: {
         type: String,
-        required: true,
-        trim: true,
+        default: "N/A",
+
+      },
+      tablenumber: {
+        type: String,
+        default: "N/A",
+
+      },
+      timearrive: {
+        type: String,
+        default: "N/A",
+
+      },
+      phonenumber: {
+        type: String,
+        default: "N/A",
+
       },
       date: {
         type: String,
         required: true,
-        trim: true,
       },
       dishes: {
-        type: [String], 
+        type: String, 
         required: true,
-        trim: true,
       },
       total_amount: {
         type: String,
         required: true,
-        trim: true,
       },
     
   },
